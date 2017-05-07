@@ -75,7 +75,7 @@ function calMoreImageInfo(e, idx, that, bindName) {
   }
   var temImages = temData.images;
   //因为无法获取view宽度 需要自定义padding进行计算，稍后处理
-  var recal = wxAutoImageCal(e.detail.width, e.detail.height,that,bindName); 
+  var recal = wxAutoImageCal(e.detail.width, e.detail.height,e.currentTarget.offsetLeft,that,bindName); 
   temImages[idx].width = recal.imageWidth;
   temImages[idx].height = recal.imageheight; 
   temData.images = temImages;
@@ -85,14 +85,14 @@ function calMoreImageInfo(e, idx, that, bindName) {
 }
 
 // 计算视觉优先的图片宽高
-function wxAutoImageCal(originalWidth, originalHeight,that,bindName) {
+function wxAutoImageCal(originalWidth, originalHeight, imgOffsetLeftOnScreen, that,bindName) {
   //获取图片的原始长宽
   var windowWidth = 0, windowHeight = 0;
   var autoWidth = 0, autoHeight = 0;
   var results = {};
   wx.getSystemInfo({
     success: function (res) {
-      var padding = that.data[bindName].view.imagePadding;
+      var padding = that.data[bindName].view.imagePadding + imgOffsetLeftOnScreen;
       windowWidth = res.windowWidth-2*padding;
       windowHeight = res.windowHeight;
       //判断按照那种方式进行缩放
